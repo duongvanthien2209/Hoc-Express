@@ -1,10 +1,15 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 
 // Setup template engine
 app.set('view engine', 'pug');
 app.set('views', './views');
+
+// Đọc dữ liệu từ client gởi lên qua method POST
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.get('/', function(req,res) {
     res.render('index', {name: 'Thien'});
@@ -30,6 +35,16 @@ app.get('/users/search', function(req,res) {
         return item.name.toLowerCase().indexOf(q) !== -1;
     });
     res.render('users/index', {users: user});
+});
+
+app.get('/users/create', function(req,res) {
+    res.render('users/create');
+});
+
+app.post('/users/create', function(req,res) {
+    // console.log(req.body);
+    users.push(req.body);
+    res.redirect('/users');
 });
 
 app.listen(port, function() {
