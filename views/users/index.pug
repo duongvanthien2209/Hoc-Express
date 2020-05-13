@@ -1,0 +1,9 @@
+h1 Users
+
+form(action='/users/search' method='GET')
+    input(type='text' name='q' placeholder='Nhap ten can tim')
+    button Search
+
+ul
+    each item in users
+        li= item.name
