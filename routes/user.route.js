@@ -7,36 +7,21 @@ const shortid = require('shortid');
 // Lowdb
 const db = require('../db');
 
-router.get('/', function(req,res) {
-    var users = db.get('users').value();
-    res.render('users/index', {users});
-});
+// Controllers
+const userController = require('../controllers/user.controller');
 
-router.get('/search', function(req,res) {
-    var q = req.query.q.toLowerCase();
-    var users = db.get('users').value();
-    var user = users.filter(function(item) {
-        return item.name.toLowerCase().indexOf(q) !== -1;
-    });
-    res.render('users/index', {users: user});
-});
+// View all
+router.get('/', userController.getIndex);
 
-router.get('/create', function(req,res) {
-    res.render('users/create');
-});
+// Search
+router.get('/search', userController.getSearch);
 
-router.post('/create', function(req,res) {
-    // console.log(req.body);
-    // users.push(req.body);
-    db.get('users').push({id: shortid.generate(), name: req.body.name, age: req.body.age}).write();
-    res.redirect('/users');
-});
+// Create
+router.get('/create', userController.getCreate);
 
-router.get('/view/:id', function(req,res) {
-    // console.log(req.params);
-    var id = req.params.id;
-    var user = db.get('users').find({id}).value();
-    res.render('users/viewUser', {user});
-});
+router.post('/create', userController.postCreate);
+
+// View user
+router.get('/view/:id', userController.getView);
 
 module.exports = router;

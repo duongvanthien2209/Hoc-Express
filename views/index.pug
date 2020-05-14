@@ -1,6 +1,9 @@
-h1 Hello #{name}
-a(href='/todos') TodoList
-br
-a(href='/users') Users
-br
-a(href='/users/create') Create User
+extends ./layouts/default
+
+block Content
+    h1 Hello #{name}
+    a(href='/todoList') TodoList
+    br
+    a(href='/users') Users
+    br
+    a(href='/users/create') Create User

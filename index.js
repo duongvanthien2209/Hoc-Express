@@ -3,9 +3,6 @@ var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 
-// Setup lowdb
-const db = require('./db');
-
 // Setup template engine
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -22,7 +19,7 @@ app.get('/', function(req,res) {
     res.render('index', {name: 'Thien'});
 });
 
-app.use('/todos', todosRoute);
+app.use('/todoList', todosRoute);
 
 app.use('/users', userRoute);
 

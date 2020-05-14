@@ -1,11 +1,14 @@
-h1 Users
+extends ../layouts/default
 
-form(action='/users/search' method='GET')
-    input(type='text' name='q' placeholder='Nhap ten can tim')
-    button Search
+block Content
+    h1 Users
 
-ul
-    each item in users
-        li
-            span= item.name
-            a(href='/users/view/' + item.id) View
+    form(action='/users/search' method='GET')
+        input(type='text' name='q' placeholder='Nhap ten can tim')
+        button Search
+
+    ul
+        each item in users
+            li
+                span= item.name
+                a(href='/users/view/' + item.id) View

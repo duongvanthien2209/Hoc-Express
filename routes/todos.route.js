@@ -4,9 +4,9 @@ const router = express.Router();
 // Lowdb
 const db = require('../db');
 
-router.get('/', function(req,res) {
-    var todoList = db.get('todoList').value();
-    res.render('todoList/index', {todoList});
-});
+// Controllers
+const todoController = require('../controllers/todo.controller');
+
+router.get('/', todoController.getIndex);
 
 module.exports = router;
