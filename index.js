@@ -3,6 +3,17 @@ var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 
+// Setup lowdb
+var low = require('lowdb');
+var FileSync = require('lowdb/adapters/FileSync');
+
+var adapter = new FileSync('db.json');
+var db = low(adapter);
+
+// Mac dinh cho database
+db.defaults({ todoList: [], users: [] })
+  .write();
+
 // Setup template engine
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -16,21 +27,24 @@ app.get('/', function(req,res) {
 });
 
 app.get('/todos', function(req,res) {
-    res.render('todoList/index', {todoList: ['Đi chợ', 'Nấu cơm', 'Học code trên codersX']});
+    var todoList = db.get('todoList').value();
+    res.render('todoList/index', {todoList});
 });
 
-var users = [
-    {name: 'Thien', age: 24},
-    {name: 'Thao', age: 24},
-    {name: 'Huy', age: 21}
-];
+// var users = [
+//     {name: 'Thien', age: 24},
+//     {name: 'Thao', age: 24},
+//     {name: 'Huy', age: 21}
+// ];
 
 app.get('/users', function(req,res) {
-    res.render('users/index', {users: users});
+    var users = db.get('users').value();
+    res.render('users/index', {users});
 });
 
 app.get('/users/search', function(req,res) {
     var q = req.query.q.toLowerCase();
+    var users = db.get('users').value();
     var user = users.filter(function(item) {
         return item.name.toLowerCase().indexOf(q) !== -1;
     });
@@ -43,7 +57,8 @@ app.get('/users/create', function(req,res) {
 
 app.post('/users/create', function(req,res) {
     // console.log(req.body);
-    users.push(req.body);
+    // users.push(req.body);
+    db.get('users').push(req.body).write();
     res.redirect('/users');
 });
 
