@@ -3,6 +3,9 @@ var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 
+// Tao chuoi ID ngau nhien
+var shortid = require('shortid');
+
 // Setup lowdb
 var low = require('lowdb');
 var FileSync = require('lowdb/adapters/FileSync');
@@ -58,8 +61,15 @@ app.get('/users/create', function(req,res) {
 app.post('/users/create', function(req,res) {
     // console.log(req.body);
     // users.push(req.body);
-    db.get('users').push(req.body).write();
+    db.get('users').push({id: shortid.generate(), name: req.body.name, age: req.body.age}).write();
     res.redirect('/users');
+});
+
+app.get('/users/view/:id', function(req,res) {
+    // console.log(req.params);
+    var id = req.params.id;
+    var user = db.get('users').find({id}).value();
+    res.render('users/viewUser', {user});
 });
 
 app.listen(port, function() {
